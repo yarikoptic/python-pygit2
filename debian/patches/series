@@ -1,2 +1,3 @@
+deb_skip_tests_if_fake_proxy
 removed-privacy-breach.patch
 removed-privacy-breach2.patch

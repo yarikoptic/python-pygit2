@@ -6,8 +6,11 @@ python-pygit2 (0.21.4-2) UNRELEASED; urgency=medium
     - add python{,3}-{cffi,pycparser} to build-depends
   * debian/rules
     - export http{,s}_proxy to prevent any online activity during build
+  * debian/patches
+    - deb_skip_tests_if_fake_proxy - skip at build time tests requiring
+      network access
 
- -- Yaroslav Halchenko <debian@onerussian.com>  Fri, 19 Dec 2014 08:47:14 -0500
+ -- Yaroslav Halchenko <debian@onerussian.com>  Fri, 19 Dec 2014 21:03:47 -0500
 
 python-pygit2 (0.21.4-1) unstable; urgency=medium
 

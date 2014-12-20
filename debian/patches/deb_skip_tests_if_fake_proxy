@@ -1,0 +1,43 @@
+--- a/test/test_credentials.py
++++ b/test/test_credentials.py
+@@ -86,7 +86,7 @@ class CredentialCallback(utils.RepoTestC
+ 
+         remote = self.repo.create_remote("github", "https://github.com/github/github")
+         remote.credentials = credentials_cb
+-
++        utils.deb_skip_test_if_fake_proxy()
+         self.assertRaises(TypeError, remote.fetch)
+ 
+ class CallableCredentialTest(utils.RepoTestCase):
+@@ -95,6 +95,7 @@ class CallableCredentialTest(utils.RepoT
+         remote = self.repo.create_remote("bb", "https://bitbucket.org/libgit2/testgitrepository.git")
+         remote.credentials = UserPass("libgit2", "libgit2")
+ 
++        utils.deb_skip_test_if_fake_proxy()
+         remote.fetch()
+ 
+ if __name__ == '__main__':
+--- a/test/test_repository.py
++++ b/test/test_repository.py
+@@ -456,6 +456,7 @@ class CloneRepositoryTest(utils.NoRepoTe
+ 
+     def test_clone_with_credentials(self):
+         credentials = pygit2.UserPass("libgit2", "libgit2")
++        utils.deb_skip_test_if_fake_proxy()
+         repo = clone_repository(
+             "https://bitbucket.org/libgit2/testgitrepository.git",
+             self._temp_dir, credentials=credentials)
+--- a/test/utils.py
++++ b/test/utils.py
+@@ -64,6 +64,11 @@ def rmtree(path):
+         onerror = lambda func, path, e: force_rm_handle(func, path, e)
+         shutil.rmtree(path, onerror=onerror)
+ 
++def deb_skip_test_if_fake_proxy():
++    """Helper to skip a tests if ran by debian/rules defining fake proxy
++    """
++    if os.environ.get('http_proxy', '') == 'http://127.0.0.1:9/':
++        raise unittest.SkipTest("Test requires network")
+ 
+ class TemporaryRepository(object):
+     def __init__(self, repo_spec):
